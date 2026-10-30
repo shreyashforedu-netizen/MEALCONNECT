@@ -27,4 +27,5 @@ If you ran the `seed_demo.py` script, you can log in immediately using:
 - `static/`: Custom CSS styling, Vanilla JS, and multimedia assets.
 =======
 # MEALCONNECT
->>>>>>> 8252022489e9b6138d0ebf74e387f6690b3bd241
+
+
