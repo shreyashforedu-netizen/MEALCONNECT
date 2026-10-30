@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Daily Food Entry - Meal Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <style>
+    body { display: flex; height: 100vh; overflow: hidden; background: #060b08; }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 280px; background: rgba(6, 11, 8, 0.95); border-right: 1px solid var(--surface-border);
+      padding: 2rem; display: flex; flex-direction: column; z-index: 10;
+    }
+    .sidebar-logo { margin-bottom: 3rem; font-size: 1.5rem; }
+    .nav-menu { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; flex-grow: 1; }
+    .nav-item { 
+      padding: 1rem; border-radius: 12px; color: var(--text-muted); 
+      text-decoration: none; display: flex; align-items: center; gap: 1rem; 
+      transition: var(--transition); font-weight: 500; 
+    }
+    .nav-item:hover, .nav-item.active { background: rgba(46,204,113,0.1); color: var(--primary); }
+    
+    /* Main Content */
+    .main-content {
+      flex-grow: 1; padding: 2rem 3rem; overflow-y: auto; position: relative;
+    }
+    .top-bar { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--surface-border); }
+    .top-bar h1 { font-size: 1.8rem; margin-bottom: 0.2rem; }
+    
+    /* Form */
+    .panel { padding: 2rem; border-radius: 16px; margin-bottom: 2rem; }
+    .panel-title { font-size: 1.3rem; font-family: var(--font-display); margin-bottom: 1.5rem; }
+    .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .form-group { display: flex; flex-direction: column; gap: 0.5rem; }
+    .form-group label { color: var(--text-muted); font-size: 0.9rem; }
+    .form-control {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--surface-border);
+      color: #fff; padding: 0.8rem 1rem; border-radius: 10px; outline: none; transition: var(--transition);
+      font-family: var(--font-body);
+    }
+    .form-control:focus { border-color: var(--primary); }
+    
+    .waste-display { 
+      background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 12px;
+      display: flex; align-items: center; justify-content: space-between; margin-top: 1.5rem;
+      border: 1px solid var(--surface-border);
+    }
+    .waste-value { font-size: 2rem; font-weight: 600; color: #ff6b6b; font-family: var(--font-display); }
+    
+    /* Table */
+    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+    th, td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--surface-border); }
+    th { color: var(--text-muted); font-weight: 500; font-size: 0.9rem; }
+    .action-btns { display: flex; gap: 0.5rem; }
+    .btn-icon { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.2rem; transition: var(--transition); }
+    .btn-icon:hover { color: #fff; }
+    .btn-icon.edit:hover { color: var(--primary); }
+    .btn-icon.delete:hover { color: #ff6b6b; }
+    
+    /* Pagination */
+    .pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: 2rem; }
+    .page-link { 
+      padding: 0.5rem 1rem; border-radius: 8px; background: rgba(255,255,255,0.05); 
+      color: var(--text-muted); text-decoration: none; transition: var(--transition);
+    }
+    .page-link:hover, .page-link.active { background: var(--primary); color: #fff; }
+  </style>
+
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</head>
+<body>
+  
+  <!-- Sidebar -->
+  <div class="sidebar glass">
+    <a href="{{ url_for('index') }}" class="sidebar-logo nav-logo" style="text-decoration:none; color:inherit; display:flex; align-items:center; cursor:pointer;">
+      <i class="ri-leaf-line" style="margin-right: 8px;"></i> Meal Connect
+    </a>
+    <ul class="nav-menu">
+      <a href="{{ url_for('dashboard') }}" class="nav-item"><i class="ri-dashboard-line"></i> Dashboard</a>
+      <a href="{{ url_for('food_entry') }}" class="nav-item active"><i class="ri-file-edit-line"></i> Daily Food Entry</a>
+      <a href="{{ url_for('prediction') }}" class="nav-item"><i class="ri-brain-line"></i> Prediction</a>
+      <a href="{{ url_for('alerts') }}" class="nav-item"><i class="ri-notification-3-line"></i> Alerts</a>
+      <a href="{{ url_for('live_map') }}" class="nav-item"><i class="ri-map-pin-line"></i> Live Map</a>
+      <a href="{{ url_for('history') }}" class="nav-item"><i class="ri-history-line"></i> Collection History</a>
+            <a href="{{ url_for('analytics') }}" class="nav-item"><i class="ri-bar-chart-box-line"></i> Business Analytics</a>
+      <a href="{{ url_for('badge') }}" class="nav-item {% if request.endpoint == 'badge' %}active{% endif %}"><i class="ri-award-line"></i> Badge of Appreciation</a>
+    </ul>
+    
+      <a href="{{ url_for('profile') }}" class="nav-item {% if request.endpoint == 'profile' %}active{% endif %}">
+        <i class="ri-settings-4-line"></i> Settings
+      </a>
+
+      <a href="{{ url_for('logout') }}" class="btn btn-outline" style="width: 100%; border-color: rgba(231,76,60,0.5); color: #ff6b6b; margin-top: 2rem;">
+      <i class="ri-logout-box-r-line"></i> &nbsp; Logout
+    </a>
+  </div>
+
+  <div class="main-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="margin-bottom: 1.5rem;">
+        {% for category, message in messages %}
+          {% if category == 'error' %}
+            <div style="padding: 1rem; border-radius: 8px; background: rgba(231, 76, 60, 0.2); color: #ff6b6b; border: 1px solid rgba(231, 76, 60, 0.3);">{{ message }}</div>
+          {% else %}
+            <div style="padding: 1rem; border-radius: 8px; background: rgba(46, 204, 113, 0.2); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3);">{{ message }}</div>
+          {% endif %}
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <div class="top-bar">
+      <h1>Daily Food Entry</h1>
+      <p style="color: var(--text-muted);">Record today's production to calculate surplus and feed the prediction model.</p>
+    </div>
+    
+    <div class="panel glass">
+      <h2 class="panel-title">{{ 'Edit Entry' if edit_data else 'Record New Entry' }}</h2>
+      <form method="POST" action="{{ url_for('food_entry') }}">
+        <div class="grid-form">
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" name="entry_date" class="form-control" required 
+                   value="{{ edit_data.entry_date if edit_data else today }}">
+          </div>
+          <div class="form-group">
+            <label>Notes (Optional)</label>
+            <input type="text" name="notes" class="form-control" placeholder="e.g. Wedding banquet tonight" 
+                   value="{{ edit_data.notes if edit_data else '' }}">
+          </div>
+          <div class="form-group">
+            <label>Food Prepared (kg)</label>
+            <input type="number" step="0.1" name="prepared_kg" id="prepared_kg" class="form-control" required
+                   value="{{ edit_data.prepared_kg if edit_data else '' }}" placeholder="0.0">
+          </div>
+          <div class="form-group">
+            <label>Food Consumed (kg)</label>
+            <input type="number" step="0.1" name="consumed_kg" id="consumed_kg" class="form-control" required
+                   value="{{ edit_data.consumed_kg if edit_data else '' }}" placeholder="0.0">
+          </div>
+        </div>
+        
+        <div class="waste-display">
+          <div>
+            <h3 style="font-weight: 500;">Calculated Surplus (Waste)</h3>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Automatically calculated as Prepared - Consumed. Cannot be typed manually.</p>
+          </div>
+          <div class="waste-value"><span id="waste_display">{{ edit_data.waste_kg if edit_data else '0.0' }}</span> kg</div>
+        </div>
+        
+        <div style="margin-top: 1.5rem; text-align: right;">
+          {% if edit_data %}
+            <a href="{{ url_for('food_entry') }}" class="btn btn-outline" style="margin-right: 1rem;">Cancel</a>
+          {% endif %}
+          <button type="submit" class="btn btn-primary btn-large">Save & Run Prediction</button>
+        </div>
+      </form>
+    </div>
+    
+    <div class="panel glass">
+      <h2 class="panel-title">History Log</h2>
+      {% if entries %}
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Prepared (kg)</th>
+              <th>Consumed (kg)</th>
+              <th>Waste (kg)</th>
+              <th>Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for entry in entries %}
+            <tr>
+              <td>{{ entry.entry_date }}</td>
+              <td>{{ entry.prepared_kg }}</td>
+              <td>{{ entry.consumed_kg }}</td>
+              <td style="color: #ff6b6b; font-weight: 600;">{{ entry.waste_kg }}</td>
+              <td style="color: var(--text-muted); font-size: 0.9rem;">{{ entry.notes }}</td>
+              <td class="action-btns">
+                <a href="{{ url_for('food_entry', edit_id=entry.id) }}" class="btn-icon edit"><i class="ri-edit-line"></i></a>
+                <form method="POST" action="{{ url_for('delete_entry', entry_id=entry.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this entry?');">
+                  <button type="submit" class="btn-icon delete"><i class="ri-delete-bin-line"></i></button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        
+        {% if total_pages > 1 %}
+        <div class="pagination">
+          {% for p in range(1, total_pages + 1) %}
+            <a href="{{ url_for('food_entry', page=p) }}" class="page-link {% if page == p %}active{% endif %}">{{ p }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
+      {% else %}
+        <div style="text-align: center; color: var(--text-muted); padding: 2rem 0;">No past entries available.</div>
+      {% endif %}
+    </div>
+
+  </div>
+
+  <script>
+    const prepInput = document.getElementById('prepared_kg');
+    const consInput = document.getElementById('consumed_kg');
+    const wasteDisplay = document.getElementById('waste_display');
+
+    function calculateWaste() {
+      const prep = parseFloat(prepInput.value) || 0;
+      const cons = parseFloat(consInput.value) || 0;
+      let waste = prep - cons;
+      if (waste < 0) waste = 0; // Prevent negative display if typing
+      wasteDisplay.textContent = waste.toFixed(2);
+    }
+
+    prepInput.addEventListener('input', calculateWaste);
+    consInput.addEventListener('input', calculateWaste);
+  </script>
+</body>
+</html>

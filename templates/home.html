@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Connect - Home</title>
+  <meta name="description" content="Meal Connect: Predicting food waste and connecting surplus with those in need.">
+  
+  <!-- Fonts: Outfit for display, Inter for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+  
+  <!-- Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</head>
+<body>
+  
+  <!-- Background Elements -->
+  <div class="bg-glow glow-top-right"></div>
+  <div class="bg-glow glow-bottom-left"></div>
+
+  <!-- 1. Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="/" class="nav-logo">
+        <i class="ri-leaf-line"></i> Meal Connect
+      </a>
+      <ul class="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#partners">Hotels</a></li>
+        <li><a href="#partners">NGOs</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a href="{{ url_for('login') }}" class="btn btn-outline btn-sm">Login</a>
+        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-sm">Sign Up</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 2. Hero Section -->
+  <header class="hero" id="home">
+    <div class="hero-content">
+      <div class="badge glass">Revolutionizing Food Waste Management</div>
+      <h1 class="hero-title">Predict Food Waste <br><span class="text-gradient">Before It Happens</span></h1>
+      <p class="hero-desc">An intelligent platform leveraging machine learning to connect hotels and restaurants with NGOs. Minimize waste, maximize impact.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('signup') }}" class="btn btn-primary btn-large">Hotel Sign Up</a>
+        <a href="{{ url_for('login') }}" class="btn btn-secondary btn-large">Hotel Login</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 3. What is Meal Connect -->
+  <section class="section about-section" id="about">
+    <div class="container glass about-container">
+      <div class="about-content">
+        <h2 class="section-title">What is Meal Connect?</h2>
+        <p class="section-subtitle text-gradient">A seamless bridge between surplus food and those in need.</p>
+        <p class="about-text">
+          Meal Connect is an innovative food-waste management and prediction platform. We empower establishments to proactively manage their food inventory using cutting-edge machine learning, drastically reducing waste. When a surplus does occur, our platform instantly connects establishments with registered NGOs, ensuring perfectly good food reaches those who need it most.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. How It Works -->
+  <section class="section timeline-section">
+    <div class="container">
+      <h2 class="section-title text-center">How It Works</h2>
+      <div class="timeline">
+        
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-icon"><i class="ri-file-edit-line"></i></div>
+            <h3>1. Record Daily Food</h3>
+            <p>Establishments securely log their daily food production and consumption.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-icon"><i class="ri-calculator-line"></i></div>
+            <h3>2. Auto-Calculate Waste</h3>
+            <p>The system automatically tracks and calculates the day's total surplus.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-icon"><i class="ri-brain-line"></i></div>
+            <h3>3. ML Predicts Tomorrow</h3>
+            <p>Machine learning models analyze trends to predict expected waste for upcoming days.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-icon"><i class="ri-dashboard-3-line"></i></div>
+            <h3>4. Threshold Check</h3>
+            <p>If surplus exceeds defined limits, the system triggers distribution workflows.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-icon"><i class="ri-notification-3-line"></i></div>
+            <h3>5. Optional NGO Alert</h3>
+            <p>Nearby registered NGOs are instantly notified of available food for pickup.</p>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-marker"></div>
+          <div class="timeline-content glass">
+            <div class="timeline-icon"><i class="ri-truck-line"></i></div>
+            <h3>6. Collected & Tracked</h3>
+            <p>Food is safely collected by NGOs, closing the loop with full traceability.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Benefits -->
+  <section class="section benefits-section">
+    <div class="container">
+      <h2 class="section-title text-center">Why Join Us?</h2>
+      <div class="benefits-grid">
+        <!-- Hotels -->
+        <div class="benefit-card glass">
+          <div class="card-header">
+            <div class="card-icon"><i class="ri-hotel-line"></i></div>
+            <h3>For Establishments</h3>
+          </div>
+          <ul class="benefit-list">
+            <li><i class="ri-check-line icon-green"></i> Dramatically reduce food waste</li>
+            <li><i class="ri-check-line icon-green"></i> AI-driven inventory planning</li>
+            <li><i class="ri-check-line icon-green"></i> Actionable analytics dashboard</li>
+            <li><i class="ri-check-line icon-green"></i> Boost CSR & sustainability impact</li>
+          </ul>
+        </div>
+        <!-- NGOs -->
+        <div class="benefit-card glass">
+          <div class="card-header">
+            <div class="card-icon"><i class="ri-heart-3-line"></i></div>
+            <h3>For NGOs</h3>
+          </div>
+          <ul class="benefit-list">
+            <li><i class="ri-check-line icon-green"></i> Receive high-quality, usable surplus</li>
+            <li><i class="ri-check-line icon-green"></i> Real-time proximity pickup alerts</li>
+            <li><i class="ri-check-line icon-green"></i> Streamlined logistics tracking</li>
+            <li><i class="ri-check-line icon-green"></i> Expand community reach</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. How to Participate -->
+  <section class="section participation-section">
+    <div class="container">
+      <div class="participation-box glass text-center">
+        <h2 class="section-title">Ready to Make an Impact?</h2>
+        <p class="participation-desc">Whether you're looking to optimize your hotel's kitchen operations or you're an NGO ready to distribute food to communities, getting started takes only minutes.</p>
+        <div class="participation-actions">
+          <a href="{{ url_for('signup') }}" class="btn btn-primary btn-large">Register as a Hotel</a>
+          <button class="btn btn-outline btn-large">Register as an NGO</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Registered Entities -->
+  <section class="section directory-section" id="partners">
+    <div class="container">
+      <div class="directory-header text-center">
+        <h2 class="section-title">Our Partners</h2>
+        <p class="section-subtitle">Join the growing network of sustainability leaders.</p>
+        <div class="directory-tabs">
+          <button class="tab-btn active" data-target="hotels-list">Hotels</button>
+          <button class="tab-btn" data-target="ngos-list">NGOs</button>
+        </div>
+      </div>
+      
+      <div class="directory-content">
+        <!-- Live Data Loading State -->
+        <div id="loading-spinner" class="spinner-container">
+          <div class="spinner"></div>
+          <p>Fetching Live Directory Data...</p>
+        </div>
+        
+        <!-- Entity Grids -->
+        <div id="hotels-list" class="entity-grid hidden"></div>
+        <div id="ngos-list" class="entity-grid hidden"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Footer -->
+  <footer class="footer glass">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <a href="{{ url_for('index') }}" class="nav-logo"><i class="ri-leaf-line"></i> Meal Connect</a>
+        <p>Predict. Connect. Nourish.</p>
+      </div>
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#partners">Partners</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="footer-contact">
+        <h3>Contact Us</h3>
+        <p><i class="ri-mail-line"></i> hello@mealconnect.com</p>
+        <p><i class="ri-phone-line"></i> +1 (800) 123-4567</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 Meal Connect. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>

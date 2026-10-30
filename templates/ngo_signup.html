@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>NGO Registration - Meal Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body style="display:flex; justify-content:center; align-items:center; min-height:100vh; padding: 2rem;">
+  <div class="glass" style="padding: 3rem; width: 500px; border-radius: 16px;">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h2 style="font-family: 'Outfit'; font-size: 1.8rem; margin-bottom: 0.5rem;">NGO Registration</h2>
+      <p style="color: var(--text-muted);">Join to collect surplus food</p>
+    </div>
+    
+    <form action="{{ url_for('ngo_signup') }}" method="POST">
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">NGO Name</label>
+        <input type="text" name="name" class="form-input" required>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Contact Person</label>
+        <input type="text" name="contact" class="form-input" required>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Phone</label>
+        <input type="text" name="phone" class="form-input" required>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Email</label>
+        <input type="email" name="email" class="form-input" required>
+      </div>
+      <div style="margin-bottom: 1rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Address/Location</label>
+        <textarea name="address" class="form-input" required></textarea>
+      </div>
+      <div style="margin-bottom: 2rem;">
+        <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted); font-size: 0.9rem;">Password</label>
+        <input type="password" name="password" class="form-input" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%;">Register NGO</button>
+    </form>
+    
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem; color: var(--text-muted);">
+      Already registered? <a href="{{ url_for('ngo_login') }}" style="color: var(--primary); text-decoration: none;">Login</a>
+    </div>
+  </div>
+</body>
+</html>

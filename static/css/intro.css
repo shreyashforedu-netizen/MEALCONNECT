@@ -1,0 +1,125 @@
+:root {
+  font-family: 'Inter', Roboto, 'Helvetica Neue', sans-serif;
+  --primary-green: #2ecc71;
+  --primary-hover: #27ae60;
+  --glow-color: rgba(46, 204, 113, 0.5);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #0d1a14;
+}
+
+/* Fallback Background with Green Gradient */
+.fallback-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, #1e3c2f 0%, #0d1a14 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+/* Fallback Logo Animation */
+.logo {
+  color: #ffffff;
+  font-size: 4rem;
+  font-weight: 800;
+  letter-spacing: -1px;
+  text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+  animation: float 4s ease-in-out infinite;
+  text-align: center;
+  background: -webkit-linear-gradient(#2ecc71, #27ae60);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+  100% { transform: translateY(0px); }
+}
+
+/* Video Element */
+.intro-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 2;
+}
+
+.intro-video.error {
+  display: none;
+}
+
+/* Dark Overlay */
+.video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 3;
+}
+
+/* Content Container for Button */
+.content-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 12vh;
+  z-index: 4;
+}
+
+/* Let's Go Button */
+.lets-go-btn {
+  background-color: var(--primary-green);
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding: 1.2rem 4rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 20px var(--glow-color);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  backdrop-filter: blur(5px);
+}
+
+.lets-go-btn:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-4px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.4), 0 0 35px var(--glow-color);
+}
+
+.lets-go-btn:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.3), 0 0 10px var(--glow-color);
+}

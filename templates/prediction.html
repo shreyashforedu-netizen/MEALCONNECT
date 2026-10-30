@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Prediction - Meal Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <style>
+    body { display: flex; height: 100vh; overflow: hidden; background: #060b08; align-items: center; justify-content: center; }
+    .pred-container { max-width: 650px; width: 100%; text-align: center; padding: 4rem 3rem; border-radius: 24px; position: relative; overflow: hidden; }
+    
+    .pred-icon { font-size: 4rem; margin-bottom: 0.5rem; }
+    .success-icon { color: #2ecc71; text-shadow: 0 0 20px rgba(46,204,113,0.5); }
+    .danger-icon { color: #ff6b6b; text-shadow: 0 0 20px rgba(231,76,60,0.5); }
+    
+    .pred-title { font-family: var(--font-display); font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .pred-value { font-size: 4.5rem; font-family: var(--font-display); font-weight: 700; margin: 1rem 0; line-height: 1; }
+    
+    .pred-details { background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; margin: 2rem 0 1rem; text-align: left; border: 1px solid var(--surface-border); }
+    .detail-row { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .detail-row:last-child { border-bottom: none; }
+    
+    /* Visual Bar */
+    .bar-container { width: 100%; height: 12px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 1rem; overflow: hidden; position: relative; }
+    .bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease-in-out; }
+    .bar-fill.safe { background: #2ecc71; box-shadow: 0 0 10px #2ecc71; }
+    .bar-fill.danger { background: #ff6b6b; box-shadow: 0 0 10px #ff6b6b; }
+    .threshold-marker { position: absolute; top: -4px; bottom: -4px; width: 4px; background: #fff; border-radius: 4px; z-index: 2; box-shadow: 0 0 5px rgba(0,0,0,0.5); }
+    
+    .warning-note {
+      background: rgba(241,196,15,0.1); color: #f1c40f; border: 1px solid rgba(241,196,15,0.3);
+      padding: 0.8rem; border-radius: 8px; margin-top: 1.5rem; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+    }
+    
+    .action-group { display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; }
+  </style>
+
+  <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+</head>
+<body>
+  
+  <div class="bg-glow glow-top-right"></div>
+  
+  <div class="pred-container glass">
+    {% if is_high %}
+      <i class="ri-alert-fill pred-icon danger-icon"></i>
+      <h1 class="pred-title">High Waste Expected</h1>
+      <p style="color: var(--text-muted);">The ML model predicts a significant surplus for tomorrow.</p>
+      <div class="pred-value" style="color: #ff6b6b;">{{ predicted_waste }} <span style="font-size: 1.5rem; color: var(--text-muted);">kg</span></div>
+    {% else %}
+      <i class="ri-check-double-line pred-icon success-icon"></i>
+      <h1 class="pred-title">Optimal Levels Expected</h1>
+      <p style="color: var(--text-muted);">The ML model predicts surplus will remain within your threshold.</p>
+      <div class="pred-value" style="color: #2ecc71;">{{ predicted_waste }} <span style="font-size: 1.5rem; color: var(--text-muted);">kg</span></div>
+    {% endif %}
+    
+    <!-- Visual Bar (Gauge) -->
+    {% set max_val = predicted_waste if predicted_waste > threshold else threshold %}
+    {% set max_val = max_val * 1.2 if max_val > 0 else 100 %}
+    {% set pct_pred = (predicted_waste / max_val * 100) %}
+    {% set pct_thresh = (threshold / max_val * 100) %}
+    
+    <div style="text-align: left; margin-top: 2rem;">
+      <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted);">
+        <span>0 kg</span>
+        <span style="position: absolute; left: {{ pct_thresh }}%; transform: translateX(-50%); color: #fff;">Threshold ({{ threshold }}kg)</span>
+        <span>{{ max_val | round(1) }} kg</span>
+      </div>
+      <div class="bar-container">
+        <div class="bar-fill {{ 'danger' if is_high else 'safe' }}" style="width: {{ pct_pred }}%;"></div>
+        <div class="threshold-marker" style="left: {{ pct_thresh }}%;"></div>
+      </div>
+    </div>
+    
+    {% if insufficient_data %}
+      <div class="warning-note">
+        <i class="ri-information-line"></i> Prediction will improve as you add more data (minimum 5 entries for ML).
+      </div>
+    {% endif %}
+    
+    <div class="action-group" style="flex-direction: column;">
+      {% if is_high %}
+        <!-- Decision Buttons for High Waste -->
+        <div style="background: rgba(255,255,255,0.03); padding: 1.5rem; border-radius: 12px; border: 1px solid var(--surface-border); text-align: left;">
+          <form action="{{ url_for('send_alert', prediction_id=prediction_id) }}" method="POST">
+            <div style="margin-bottom: 1rem;">
+              <label style="display:block; color:var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Reserved for Collection (kg)</label>
+              <input type="number" step="0.1" name="reserved_kg" value="{{ predicted_waste }}" required style="width:100%; padding: 0.8rem; border-radius:8px; background: rgba(0,0,0,0.5); border:1px solid var(--surface-border); color: #fff;">
+            </div>
+            <div style="margin-bottom: 1rem;">
+              <label style="display:block; color:var(--text-muted); font-size: 0.9rem; margin-bottom: 0.5rem;">Select NGO Partner</label>
+              <select name="ngo_id" required style="width:100%; padding: 0.8rem; border-radius:8px; background: rgba(0,0,0,0.5); border:1px solid var(--surface-border); color: #fff;">
+                <option value="Broadcast">Broadcast to All NGOs</option>
+                {% for ngo in ngos %}
+                  <option value="{{ ngo.id }}">{{ ngo.name }} ({{ ngo.location }})</option>
+                {% endfor %}
+              </select>
+            </div>
+            <button type="submit" class="btn btn-primary btn-large" style="width:100%; margin-bottom: 1rem;"><i class="ri-notification-3-line"></i> Confirm & Send Alert</button>
+          </form>
+          <form action="{{ url_for('ignore_alert') }}" method="POST" style="margin: 0;">
+            <button type="submit" class="btn btn-outline" style="width:100%;">Ignore & Don't Send</button>
+          </form>
+        </div>
+      {% else %}
+        <!-- Standard Buttons for Safe Waste -->
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <a href="{{ url_for('food_entry') }}" class="btn btn-outline">Back to Entries</a>
+          <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</body>
+</html>
