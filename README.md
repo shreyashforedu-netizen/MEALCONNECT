@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Meal Connect 🍃
 
 Meal Connect is an intelligent food-waste management and prediction platform that seamlessly connects hotels, restaurants, and food-serving establishments with NGOs to redistribute surplus food and prevent waste.
@@ -56,3 +57,6 @@ If you ran the `seed_demo.py` script, you can log in immediately using:
 - `seed_demo.py`: Automated demo data generator.
 - `templates/`: HTML structures infused with Jinja2 templating.
 - `static/`: Custom CSS styling, Vanilla JS, and multimedia assets.
+=======
+# MEALCONNECT
+>>>>>>> 8252022489e9b6138d0ebf74e387f6690b3bd241
